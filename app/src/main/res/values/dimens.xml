@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="normal_padding">16dp</dimen>
+    <dimen name="fab_padding">16dp</dimen>
+    <dimen name="small_padding">4dp</dimen>
+    <dimen name="activity_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="normal_margin">16dp</dimen>
+    <dimen name="quantity_button_size">40dp</dimen>
+</resources>

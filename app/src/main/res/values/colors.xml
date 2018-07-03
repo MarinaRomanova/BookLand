@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary_light">#B3E5FC</color>
+    <color name="primary_dark">#03A9F4</color>
+    <color name="primary">#BBDEFB</color>
+    <color name="accent">#FFE0B2</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#BDBDBD</color>
+    <color name="editorColorPrimary">#14568C</color>
+    <color name="editorColorPrimaryDark">#00214D</color>
+</resources>
+
