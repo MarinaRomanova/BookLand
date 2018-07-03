@@ -1,11 +1,14 @@
 package com.example.android.bookland.data;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import static com.example.android.bookland.data.BookContract.BookEntry;
+import static com.example.android.bookland.data.BookContract.BookEntry.TABLE_NAME;
+import static com.example.android.bookland.data.BookContract.BookEntry._ID;
 
 /**
  * Created by Marina on 03.06.2018.
@@ -23,8 +26,8 @@ public class BookDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        final String SQL_CREATE_BOOKS_TABLE = "CREATE TABLE " + BookEntry.TABLE_NAME + "("
-                + BookEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+        final String SQL_CREATE_BOOKS_TABLE = "CREATE TABLE " + TABLE_NAME + "("
+                + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + BookEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, "
                 + BookEntry.COLUMN_PRICE + " INTEGER NOT NULL, "
                 + BookEntry.COLUMN_QUANTITY + " INTEGER NOT NULL DEFAULT 0, "
@@ -38,5 +41,14 @@ public class BookDbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+
+    public void sellBook (long id, int quantity) {
+        if (quantity >= 1){
+            quantity -=1;
+            SQLiteDatabase database = getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(BookEntry.COLUMN_QUANTITY, quantity);
+        }
     }
 }

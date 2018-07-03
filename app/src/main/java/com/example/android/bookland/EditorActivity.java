@@ -72,27 +72,17 @@ public class EditorActivity extends AppCompatActivity implements
         orderButton = (Button) findViewById(R.id.order_button);
 
         // Examine the intent that was used to launch this activity,
-        // in order to figure out if we're creating a new pet or editing an existing one.
+        // in order to figure out if we're creating a new book or editing an existing one.
         Intent intent = getIntent();
         myCurrentBookUri = intent.getData();
-
-        // If the intent DOES NOT contain a pet content URI, then we know that we are
-        // creating a new pet.
         if (myCurrentBookUri == null) {
-            // This is a new book, so change the app bar to say "Add new Book"
             setTitle(getString(R.string.editor_activity_title_new_book));
             orderButton.setVisibility(View.GONE);
-
-
             // Invalidate the options menu, so the "Delete" menu option can be hidden.
-            // (It doesn't make sense to delete a book that hasn't been created yet.)
             invalidateOptionsMenu();
         } else {
             // Otherwise this is an existing book, so change app bar to say "Edit Book"
             setTitle(getString(R.string.editor_activity_title_book_details));
-
-            // Initialize a loader to read the pet data from the database
-            // and display the current values in the editor
             getLoaderManager().initLoader(EXISTING_BOOK_LOADER, null, this);
         }
 
@@ -132,17 +122,15 @@ public class EditorActivity extends AppCompatActivity implements
             return;
         }
 
-        //Verifies that entered information is valid before updating the database
-
         ContentValues values = new ContentValues();
-
+        //Verifies that entered information is valid before updating the database
         if (!TextUtils.isEmpty(nameString)) {
             values.put(BookEntry.COLUMN_PRODUCT_NAME, nameString);
         } else {
             myNameEditText.setError(getString(R.string.name_error));
             requestFocus(myNameEditText);
         }
-        if (!TextUtils.isEmpty(priceString)) {
+        if (!TextUtils.isEmpty(priceString)&&(Integer.parseInt(priceString) >0)) {
             int priceInt = Integer.parseInt(priceString);
             values.put(BookEntry.COLUMN_PRICE, priceInt);
         } else {
@@ -170,17 +158,11 @@ public class EditorActivity extends AppCompatActivity implements
 
         // Determine if this is a new or existing book by checking if myCurrentBookUri is null or not
         if (myCurrentBookUri == null) {
-            // This is a NEW book, so insert a new book into the provider,
-            // returning the content URI for the new book.
+            // This is a NEW book, so insert a new book into the provider, returning the content URI for the new book.
             Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
 
             // Show a toast message depending on whether or not the insertion was successful.
-            if (newUri == null) {
-                // If the new content URI is null, then there was an error with insertion.
-                Toast.makeText(this, getString(R.string.editor_save_book_failed),
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                // Otherwise, the insertion was successful and we can display a toast.
+            if (!(newUri == null)) {
                 Toast.makeText(this, getString(R.string.editor_save_book_successful),
                         Toast.LENGTH_SHORT).show();
             }
@@ -192,15 +174,15 @@ public class EditorActivity extends AppCompatActivity implements
             int rowsAffected = getContentResolver().update(myCurrentBookUri, values, null, null);
 
             // Show a toast message depending on whether or not the update was successful.
-            if (rowsAffected == 0) {
-                // If no rows were affected, then there was an error with the update.
-                Toast.makeText(this, getString(R.string.editor_update_book_failed),
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                // Otherwise, the update was successful and we can display a toast.
+            if (rowsAffected != 0) {
                 Toast.makeText(this, getString(R.string.editor_update_book_successful),
                         Toast.LENGTH_SHORT).show();
             }
+        }
+
+        if (!TextUtils.isEmpty(nameString) && !TextUtils.isEmpty(priceString) &&(Integer.parseInt(priceString) >0) &&
+                !TextUtils.isEmpty(supplierString) && !TextUtils.isEmpty(phoneString)){
+            finish();
         }
 
     }
@@ -235,8 +217,6 @@ public class EditorActivity extends AppCompatActivity implements
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
                 saveBook();
-                //exit activity
-                    finish();
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:

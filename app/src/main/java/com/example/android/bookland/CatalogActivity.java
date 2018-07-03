@@ -21,6 +21,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.example.android.bookland.data.BookDbHelper;
+
 import static com.example.android.bookland.data.BookContract.BookEntry;
 import static com.example.android.bookland.data.BookContract.BookEntry.COLUMN_PRICE;
 import static com.example.android.bookland.data.BookContract.BookEntry.COLUMN_PRODUCT_NAME;
@@ -37,6 +39,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
+        invalidateOptionsMenu();
 
         Button buy_button = (Button) findViewById(R.id.buy_button);
 
@@ -98,16 +101,15 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         return true;
     }
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        Cursor books = getContentResolver().query(CONTENT_URI, null, null, null, null);
-        if (books == null) {
-            MenuItem menuItem = menu.findItem(R.id.action_delete_all_entries);
-            menuItem.setVisible(false);
-        }
-        return true;
-    }
+    //@Override
+    //public boolean onPrepareOptionsMenu(Menu menu) {
+      //  super.onPrepareOptionsMenu(menu);
+       //    if (values == null) {
+         //   MenuItem menuItem = menu.findItem(R.id.action_delete_all_entries);
+           // menuItem.setVisible(false);
+        //}
+        //return true;
+    //}
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -154,6 +156,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     private void deleteAllBooks() {
         int rowsDeleted = getContentResolver().delete(CONTENT_URI, null, null);
         Log.v("CatalogActivity", rowsDeleted + " rows deleted from pet database");
+        invalidateOptionsMenu();
     }
 
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
@@ -171,6 +174,12 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     public void onLoaderReset(Loader<Cursor> loader) {
         myCursorAdapter.swapCursor(null);
 
+    }
+
+    public void buyBook (long id, int quantity) {
+
+        BookDbHelper myDbHelper = new BookDbHelper(this);
+        myDbHelper.sellBook(id, quantity);
     }
 
 
